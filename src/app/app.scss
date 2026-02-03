@@ -1,0 +1,350 @@
+:host {
+  $baseSize: min(90vw, 900px);
+  $circle2Size: min(70vw, 700px);
+  $circle3Size: min(63vw, 630px);
+  $circle4Size: min(44vw, 440px);
+  $circle5Size: min(40vw, 400px);
+  $circle6Size: min(10vw, 80px);
+  $circle7Size: min(7vw, 50px);
+  $borderWidth: min(5px, 1vw);
+  $numberPadding: min(3vw, 30px);
+  $numberWidth: min(1vw, 10px);
+  $fontSize: min(5vw, 60px);
+  $fontSizeScore: min(10vw, 80px);
+  $crossesSize: min(20vw, 80px);
+
+  .score {
+    display: flex;
+    justify-content: center;
+    font-size: $fontSizeScore;
+    padding-top: 10px;
+  }
+
+  .crosses {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    padding-top: 20px;
+
+    .cross {
+      inline-size: $crossesSize;
+      aspect-ratio: 1;
+      transform: rotate(45deg);
+      --color: rgb(196, 194, 194);
+
+      &.error {
+        --color: rgb(247, 114, 114);
+      }
+
+      --gradient: #d000 33.33%, var(--color) 0, var(--color) 66.66%, #d000 0;
+
+      background: linear-gradient(0, var(--gradient)),
+        linear-gradient(90deg, var(--gradient));
+    }
+  }
+
+  .circle {
+    border: 1px solid black;
+    position: absolute;
+    top: calc(50vh - $baseSize/2);
+    left: calc(50vw - $baseSize/2);
+    width: $baseSize;
+    height: $baseSize;
+    border-radius: 50%;
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    margin-top: 5vw;
+
+    &.circle-2.mask {
+      pointer-events: all;
+    }
+
+    &.circle-1 {
+      pointer-events: all;
+      background-color: rgb(49, 49, 49);
+      cursor: pointer;
+      clip-path: circle(calc(baseSize / 2) at center);
+      border-width: $borderWidth;
+
+      li {
+        border-color: transparent;
+
+        &.debug {
+          border-color: red;
+        }
+      }
+
+      li:hover {
+        background-color: rgb(80, 80, 80);
+
+        & + .number {
+          color: rgb(216, 216, 216);
+        }
+      }
+    }
+
+    &.circle-2 {
+      top: calc(50vh - $circle2Size/2);
+      left: calc(50vw - $circle2Size/2);
+      width: $circle2Size;
+      height: $circle2Size;
+      border-width: $borderWidth;
+    }
+
+    &.circle-3 {
+      top: calc(50vh - $circle3Size/2);
+      left: calc(50vw - $circle3Size/2);
+      width: $circle3Size;
+      height: $circle3Size;
+    }
+
+    &.circle-4 {
+      top: calc(50vh - $circle4Size/2);
+      left: calc(50vw - $circle4Size/2);
+      width: $circle4Size;
+      height: $circle4Size;
+    }
+
+    &.circle-5 {
+      top: calc(50vh - $circle5Size/2);
+      left: calc(50vw - $circle5Size/2);
+      width: $circle5Size;
+      height: $circle5Size;
+    }
+
+    &.circle-6 {
+      top: calc(50vh - $circle6Size/2);
+      left: calc(50vw - $circle6Size/2);
+      width: $circle6Size;
+      height: $circle6Size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(22, 22, 22);
+    }
+
+    &.circle-7 {
+      top: calc(50vh - $circle7Size/2);
+      left: calc(50vw - $circle7Size/2);
+      width: $circle7Size;
+      height: $circle7Size;
+
+      background-color: rgb(99, 99, 99);
+    }
+  }
+
+  li {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    transform-origin: 0% 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+  }
+
+  .number {
+    position: absolute;
+    top: calc($baseSize / 2 - $numberPadding);
+    right: -10px;
+    padding-left: calc(3 * $baseSize / 8);
+    width: calc($baseSize / 8 + $numberWidth);
+    transform-origin: center left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: $fontSize;
+    line-height: $fontSize;
+    pointer-events: none;
+    color: rgb(143, 143, 143);
+  }
+
+  @for $i from 1 through 20 {
+    .circle:not(.third-area) {
+      li:nth-of-type(#{$i}) {
+        $angle: $i * 18deg - 9deg;
+        transform: rotate($angle) skewY(-72deg);
+      }
+
+      .number:nth-of-type(#{$i}) {
+        $angle: $i * 18deg - 90deg;
+        transform: rotate($angle);
+
+        span {
+          transform: rotate(-$angle);
+        }
+      }
+    }
+
+    .circle.third-area {
+      li:nth-of-type(#{$i}) {
+        border-color: transparent;
+        $angle: $i * 18deg - 3deg;
+        transform: rotate($angle) skewY(-84deg);
+      }
+    }
+  }
+
+  // COLORS
+
+  .addition,
+  .third-area .third-addition {
+    background-color: rgb(128, 205, 241) !important;
+  }
+
+  .substraction,
+  .third-area .third-substraction {
+    background-color: rgb(248, 250, 142) !important;
+  }
+
+  .multiplication,
+  .third-area .third-multiplication {
+    background-color: rgb(247, 146, 230) !important;
+  }
+
+  .division,
+  .third-area .third-division {
+    background-color: rgb(139, 91, 252) !important;
+  }
+
+  .circle-2:not(.third-area),
+  .circle-4:not(.third-area) {
+    li:nth-child(odd) {
+      background-color: rgb(61, 61, 61);
+    }
+
+    li:nth-child(even) {
+      background-color: rgb(99, 99, 99);
+    }
+  }
+
+  .circle-3:not(.third-area),
+  .circle-5:not(.third-area) {
+    li:nth-child(odd) {
+      background-color: rgb(218, 218, 218);
+    }
+
+    li:nth-child(even) {
+      background-color: rgb(22, 22, 22);
+    }
+  }
+
+  // BULLSEYE
+
+  .bullseye {
+    width: calc(100% / 1.5);
+    height: calc(100% / 1.5);
+  }
+
+  .square,
+  .reverse {
+    border: 1px solid black;
+    border-radius: 1px;
+  }
+
+  .reverse {
+    transform: rotate(45deg);
+  }
+
+
+  .animation {
+    animation: tilt-n-move-shaking 0.35s infinite;
+    position: absolute;
+    top: 0;
+  }
+
+  .wavy-line {
+    --s: 20px;
+    --b: 3px;
+    --m: 2;
+    width: calc(80px / min(8vw, 80px) * 2 * min(8vw, 80px));
+    height: 100%;
+    margin-left: calc(-30px * min(8vw, 80px) / 80px);
+    margin-top: calc(-30px * min(8vw, 80px) / 80px);
+    position: absolute;
+    scale: calc($circle6Size / 80px);
+
+    background: black;
+    --R: calc(var(--s) * sqrt(var(--m) * var(--m) + 1) + var(--b) / 2);
+    --_g: #0000 calc(99% - var(--b)), #000 calc(101% - var(--b)) 99%, #0000 101%;
+    mask: radial-gradient(
+          var(--R) at left 50% bottom calc(-1 * var(--m) * var(--s)),
+          var(--_g)
+        )
+        calc(50% - 2 * var(--s)) calc(50% - var(--s) / 2 - var(--b) / 2) /
+        calc(4 * var(--s)) calc(var(--s) + var(--b)) repeat-x,
+      radial-gradient(
+          var(--R) at left 50% top calc(-1 * var(--m) * var(--s)),
+          var(--_g)
+        )
+        50% calc(50% + var(--s) / 2 + var(--b) / 2) / calc(4 * var(--s))
+        calc(var(--s) + var(--b)) repeat-x;
+
+    &.top {
+      top: calc(min(8vw, 80px) / 80px * 10px);
+    }
+
+    &.bottom {
+      bottom: calc(min(8vw, 80px) / 80px *  -20px);
+    }
+
+    &.top-1 {
+      top: calc(min(8vw, 80px) / 80px * 5px);
+    }
+
+    &.bottom-1 {
+      bottom: calc(min(8vw, 80px) / 80px * -20px);
+    }
+
+    &.top-2 {
+      top: calc(min(8vw, 80px) / 80px * 11px);
+    }
+
+    &.bottom-2 {
+      bottom: calc(min(8vw, 80px) / 80px * -26px);
+    }
+
+    &.top-hundred-1 {
+      top: calc(min(8vw, 80px) / 80px * 5px);
+    }
+
+    &.bottom-hundred-1 {
+      bottom: calc(min(8vw, 80px) / 80px * -15px);
+    }
+
+    &.top-hundred-2 {
+      top: calc(min(8vw, 80px) / 80px * 15px);
+    }
+
+    &.bottom-hundred-2 {
+      bottom: calc(min(8vw, 80px) / 80px * -25px);
+    }
+  }
+}
+
+@keyframes tilt-n-move-shaking {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(10px, 10px);
+  }
+  50% {
+    transform: translate(0, 0);
+  }
+  75% {
+    transform: translate(-10px, 10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+
