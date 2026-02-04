@@ -75,13 +75,12 @@ board = [
 
   randomize(): void {
     this.updatePulls();
-    this.chooseRequiredOperation();
     let attempts = 0;
     let success;
     let a, b, c, d, res;
     let opA, opB, opC, opD, bullsEyeOp;
 
-    while (attempts < 1000 && !success) {
+    while (attempts < 100000 && !success) {
       attempts++;
       const requiredOperationIndex = this.randomInt(3) + 1;
       opA = this.pullA[this.randomInt(this.pullA.length)];
@@ -253,58 +252,6 @@ board = [
   }
 
   updatePulls(): void {
-    switch (this.score) {
-      case 0:
-        this.pullA = [Operation.ADDITION];
-        this.pull = [Operation.ADDITION];
-        this.bullEyePull = [];
-        this.thirdOperationsEnabled = false;
-        break;
-      case 10:
-        this.pullA.push(Operation.SUBSTRACTION);
-        this.pull.push(Operation.SUBSTRACTION);
-        break;
-      case 20:
-        this.pull.push(Operation.MULTIPLICATION);
-        break;
-      case 30:
-        this.pull.push(Operation.DIVISION);
-        break;
-      case 40:
-        this.bullEyePull = [Operation.SQUARE];
-        break;
-      case 50:
-        this.bullEyePull = [Operation.REVERSE];
-        break;
-      case 60:
-        this.bullEyePull = [Operation.ROUNDED];
-        break;
-      case 70:
-        this.bullEyePull = [
-          Operation.SQUARE,
-          Operation.REVERSE,
-          Operation.ROUNDED,
-        ];
-        this.thirdOperationsEnabled = true;
-        this.thirdOperationRequired = true;
-        break;
-      case 80:
-        this.bullEyePull = [Operation.TEN_ROUNDED, Operation.HUNDRED_ROUNDED];
-        this.thirdOperationRequired = false;
-        break;
-      case 90:
-        this.bullEyePull = [
-          Operation.SQUARE,
-          Operation.REVERSE,
-          Operation.ROUNDED,
-          Operation.TEN_ROUNDED,
-          Operation.HUNDRED_ROUNDED,
-        ];
-        break;
-    }
-  }
-
-  chooseRequiredOperation(): void {
     const random = [
       Operation.ADDITION,
       Operation.SUBSTRACTION,
@@ -312,22 +259,93 @@ board = [
       Operation.DIVISION,
     ];
 
-    switch ((this.score - (this.score % 10)) / 10) {
+     switch ((this.score - (this.score % 5)) / 5) {
       case 0:
         this.requiredOperation = Operation.ADDITION;
+        this.pullA = [Operation.ADDITION];
+        this.pull = [Operation.ADDITION];
+        this.bullEyePull = [];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
         break;
       case 1:
         this.requiredOperation = Operation.SUBSTRACTION;
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.bullEyePull = [];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
         break;
       case 2:
         this.requiredOperation = Operation.MULTIPLICATION;
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION];
+        this.bullEyePull = [];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
         break;
       case 3:
         this.requiredOperation = Operation.DIVISION;
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
         break;
+      case 4:
+        this.requiredOperation = random[this.randomInt(4)];
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [Operation.SQUARE];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
+        break;
+      case 5:
+        this.requiredOperation = random[this.randomInt(4)];
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [Operation.REVERSE];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
+        break;   
+      case 6:
+        this.requiredOperation = random[this.randomInt(4)];
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [Operation.ROUNDED];
+        this.thirdOperationsEnabled = false;
+        this.thirdOperationRequired = false;
+        break;  
+      case 7:
+        this.requiredOperation = random[this.randomInt(4)];
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [ Operation.SQUARE, Operation.REVERSE, Operation.ROUNDED];
+        this.thirdOperationsEnabled = true;
+        this.thirdOperationRequired = true;
+        break;  
+      case 8:
+        this.requiredOperation = random[this.randomInt(4)];
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [Operation.TEN_ROUNDED, Operation.HUNDRED_ROUNDED];
+        this.thirdOperationsEnabled = true;
+        this.thirdOperationRequired = false;
+        break;  
+      case 9:
       default:
         this.requiredOperation = random[this.randomInt(4)];
-        break;
+        this.pullA = [Operation.ADDITION, Operation.SUBSTRACTION];
+        this.pull = [Operation.ADDITION, Operation.SUBSTRACTION, Operation.MULTIPLICATION, Operation.DIVISION];
+        this.bullEyePull = [Operation.SQUARE, Operation.REVERSE, Operation.ROUNDED, Operation.TEN_ROUNDED, Operation.HUNDRED_ROUNDED];
+        this.thirdOperationsEnabled = true;
+        this.thirdOperationRequired = false;
+        break;   
+    }
+    if (this.score === 40) {
+      this.bullEyePull = [Operation.TEN_ROUNDED];
+    } else if (this.score === 41) {
+      this.bullEyePull = [Operation.HUNDRED_ROUNDED];
     }
   }
 }
